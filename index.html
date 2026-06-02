@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Gateway</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  overflow:hidden;
+  height:100vh;
+  background:#020202;
+  font-family:Consolas, monospace;
+  color:#00ff88;
+  position:relative;
+}
+
+/* BACKGROUND */
+
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+}
+
+.grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,120,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,120,.06) 1px, transparent 1px);
+  background-size:32px 32px;
+  animation:gridMove 10s linear infinite;
+}
+
+@keyframes gridMove{
+  from{
+    transform:translateY(0);
+  }
+  to{
+    transform:translateY(32px);
+  }
+}
+
+.scanline{
+  position:absolute;
+  left:0;
+  width:100%;
+  height:4px;
+  background:rgba(0,255,120,.12);
+  box-shadow:0 0 15px #00ff88;
+  animation:scan 6s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes scan{
+  from{
+    top:-10%;
+  }
+  to{
+    top:110%;
+  }
+}
+
+/* PARTICLES */
+
+.particle{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#00ff88;
+  border-radius:50%;
+  opacity:.7;
+  animation:float 12s linear infinite;
+}
+
+@keyframes float{
+  from{
+    transform:translateY(100vh);
+    opacity:0;
+  }
+  10%{
+    opacity:1;
+  }
+  to{
+    transform:translateY(-120vh);
+    opacity:0;
+  }
+}
+
+/* WRAPPER */
+
+.wrapper{
+  position:relative;
+  z-index:5;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:10px;
+}
+
+/* PANEL */
+
+.panel{
+  width:100%;
+  max-width:760px;
+  background:rgba(0,0,0,.72);
+  border:1px solid #00ff88;
+  border-radius:16px;
+  padding:16px;
+  box-shadow:
+    0 0 18px rgba(0,255,120,.28),
+    inset 0 0 18px rgba(0,255,120,.05);
+  backdrop-filter:blur(5px);
+
+  transform:scale(.88);
+  transform-origin:center;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  border-bottom:1px solid rgba(0,255,120,.2);
+  padding-bottom:10px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:bold;
+  text-shadow:0 0 8px #00ff88;
+}
+
+.online{
+  color:#00ffaa;
+  font-size:12px;
+  animation:blink .8s infinite alternate;
+}
+
+@keyframes blink{
+  from{opacity:.4;}
+  to{opacity:1;}
+}
+
+/* PROFILE */
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
+  padding:12px;
+  border:1px solid rgba(0,255,120,.25);
+  border-radius:14px;
+  background:rgba(0,255,120,.04);
+  box-shadow:0 0 10px rgba(0,255,120,.08);
+}
+
+.avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:2px solid #00ff88;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  font-weight:bold;
+  color:#00ff88;
+  box-shadow:0 0 15px rgba(0,255,120,.35);
+}
+
+.profile-info{
+  flex:1;
+}
+
+.name{
+  font-size:18px;
+  font-weight:bold;
+  color:#00ff88;
+  text-shadow:0 0 8px rgba(0,255,120,.5);
+}
+
+.role{
+  font-size:11px;
+  color:#00ffaa;
+  margin-top:4px;
+  letter-spacing:2px;
+}
+
+.id-line{
+  margin-top:6px;
+  font-size:10px;
+  opacity:.7;
+}
+
+/* CONTENT */
+
+.content{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+/* TERMINAL */
+
+.terminal{
+  background:#040404;
+  border:1px solid #00ff88;
+  border-radius:12px;
+  padding:14px;
+  min-height:240px;
+  overflow:hidden;
+}
+
+.line{
+  margin-bottom:10px;
+  font-size:12px;
+  line-height:1.5;
+  opacity:0;
+  animation:fade .6s forwards;
+  word-break:break-word;
+}
+
+.line:nth-child(1){animation-delay:.4s;}
+.line:nth-child(2){animation-delay:1s;}
+.line:nth-child(3){animation-delay:1.7s;}
+.line:nth-child(4){animation-delay:2.4s;}
+.line:nth-child(5){animation-delay:3.1s;}
+.line:nth-child(6){animation-delay:3.8s;}
+
+@keyframes fade{
+  to{
+    opacity:1;
+  }
+}
+
+.success{
+  color:#00ff88;
+}
+
+.warning{
+  color:#00ffaa;
+}
+
+.error{
+  color:#ff5555;
+}
+
+/* SIDE */
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.box{
+  background:#050505;
+  border:1px solid rgba(0,255,120,.25);
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 0 10px rgba(0,255,120,.08);
+}
+
+.box-title{
+  color:#00ffaa;
+  margin-bottom:8px;
+  font-size:11px;
+}
+
+/* PROGRESS */
+
+.progress{
+  width:100%;
+  height:10px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#111;
+  border:1px solid #00ff88;
+}
+
+.fill{
+  width:0%;
+  height:100%;
+  background:#00ff88;
+  box-shadow:0 0 14px #00ff88;
+  animation:load 4s linear forwards;
+}
+
+@keyframes load{
+  to{
+    width:100%;
+  }
+}
+
+/* RADAR */
+
+.radar{
+  width:120px;
+  height:120px;
+  border:1px solid #00ff88;
+  border-radius:50%;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 14px rgba(0,255,120,.25);
+}
+
+.radar::before{
+  content:'';
+  position:absolute;
+  width:50%;
+  height:2px;
+  background:#00ff88;
+  top:50%;
+  left:50%;
+  transform-origin:left center;
+  animation:rotate 2s linear infinite;
+  box-shadow:0 0 10px #00ff88;
+}
+
+@keyframes rotate{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.box p{
+  font-size:11px;
+  margin-bottom:6px;
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:14px;
+  text-align:center;
+  color:#00ffaa;
+  opacity:.7;
+  font-size:10px;
+}
+
+/* OFFLINE MODAL */
+
+.offline-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(6px);
+  z-index:999;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.offline-box{
+  width:100%;
+  max-width:340px;
+  background:#050505;
+  border:1px solid #00ff88;
+  border-radius:16px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,255,120,.25);
+  animation:popup .3s ease;
+}
+
+@keyframes popup{
+  from{
+    transform:scale(.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.offline-icon{
+  font-size:50px;
+  margin-bottom:15px;
+}
+
+.offline-title{
+  font-size:20px;
+  color:#00ff88;
+  margin-bottom:10px;
+}
+
+.offline-text{
+  font-size:12px;
+  color:#00ffaa;
+  line-height:1.6;
+  opacity:.8;
+}
+
+.reload-btn{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#00ff88;
+  color:#000;
+  font-weight:bold;
+  font-family:Consolas, monospace;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.reload-btn:hover{
+  transform:scale(1.03);
+  box-shadow:0 0 15px #00ff88;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  body{
+    overflow:auto;
+  }
+
+  .wrapper{
+    align-items:flex-start;
+    padding:10px;
+  }
+
+  .panel{
+    transform:scale(.82);
+    margin-top:-30px;
+  }
+
+  .content{
+    grid-template-columns:1fr;
+  }
+
+  .logo{
+    font-size:16px;
+  }
+
+  .radar{
+    width:100px;
+    height:100px;
+  }
+
+  .terminal{
+    min-height:200px;
+  }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="grid"></div>
+  <div class="scanline"></div>
+</div>
+
+<div class="wrapper">
+
+  <div class="panel">
+
+    <div class="header">
+
+      <div class="logo">
+        SECURE ACCESS TERMINAL
+      </div>
+
+      <div class="online">
+        ● ONLINE
+      </div>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div class="profile">
+
+      <div class="avatar">
+        S
+      </div>
+
+      <div class="profile-info">
+
+        <div class="name">
+          SAFARUDDIN
+        </div>
+
+        <div class="role">
+          SYSTEM OPERATOR
+        </div>
+
+        <div class="id-line">
+          ACCESS LEVEL : ROOT ADMINISTRATOR
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <!-- TERMINAL -->
+
+      <div class="terminal">
+
+        <div class="line success">
+          > Booting encrypted gateway...
+        </div>
+
+        <div class="line warning">
+          > Verifying authentication token...
+        </div>
+
+        <div class="line success">
+          > Establishing secure tunnel...
+        </div>
+
+        <div class="line success">
+          > Accessing e-Rapor mainframe...
+        </div>
+
+        <div class="line success">
+          > Operator detected : SAFARUDDIN
+        </div>
+
+        <div class="line" id="status">
+          > Awaiting server response...
+        </div>
+
+      </div>
+
+      <!-- SIDE -->
+
+      <div class="side">
+
+        <div class="box">
+
+          <div class="box-title">
+            SERVER CONNECTION
+          </div>
+
+          <div class="progress">
+            <div class="fill"></div>
+          </div>
+
+        </div>
+
+        <div class="box">
+
+          <div class="box-title">
+            NETWORK SCANNER
+          </div>
+
+          <div class="radar"></div>
+
+        </div>
+
+        <div class="box">
+
+          <div class="box-title">
+            SECURITY STATUS
+          </div>
+
+          <p>Firewall : ACTIVE</p>
+          <p>Encryption : ENABLED</p>
+          <p>Proxy Route : CONNECTED</p>
+          <p>Server Ping : 12ms</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      SYSTEM CORE v4.8.1 • SECURE NETWORK • OPERATOR ACTIVE
+    </div>
+
+  </div>
+
+</div>
+
+<!-- OFFLINE MODAL -->
+
+<div class="offline-modal" id="offlineModal">
+
+  <div class="offline-box">
+
+    <div class="offline-icon">
+      ⚠
+    </div>
+
+    <div class="offline-title">
+      SERVER OFFLINE
+    </div>
+
+    <div class="offline-text">
+      Main gateway server sedang offline atau URL belum tersedia dari database server.
+    </div>
+
+    <button class="reload-btn" onclick="location.reload()">
+      RELOAD SYSTEM
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+/* PARTICLES */
+
+for(let i=0;i<35;i++){
+
+  const p = document.createElement('div');
+
+  p.className = 'particle';
+
+  p.style.left = Math.random()*100 + 'vw';
+
+  p.style.animationDuration = (6 + Math.random()*8) + 's';
+
+  p.style.animationDelay = Math.random()*5 + 's';
+
+  document.body.appendChild(p);
+
+}
+
+/* SHOW OFFLINE MODAL */
+
+function showOffline(){
+
+  document.getElementById('offlineModal').style.display = 'flex';
+
+}
+
+/* REDIRECT */
+
+async function redirectFromSheet() {
+
+  const status = document.getElementById('status');
+
+  try {
+
+    const response = await fetch(
+      'https://script.google.com/macros/s/AKfycbybOX027lP2uRWJ3qipQOXKdj-Lgxu7FACwBNib8Rf2SPOVUlPfc6_DPU_8xBVLGAkb/exec'
+    );
+
+    const data = await response.json();
+
+    if (data.success && data.url && data.url.trim() !== '') {
+
+      status.innerHTML =
+        '> ACCESS GRANTED<br>> Redirecting to secure server...';
+
+      setTimeout(() => {
+
+        window.location.href = data.url;
+
+      }, 4500);
+
+    } else {
+
+      status.innerHTML =
+        '> SERVER OFFLINE';
+
+      status.classList.add('error');
+
+      showOffline();
+
+    }
+
+  } catch (error) {
+
+    status.innerHTML =
+      '> CONNECTION FAILED';
+
+    status.classList.add('error');
+
+    showOffline();
+
+    console.error(error);
+
+  }
+
+}
+
+redirectFromSheet();
+
+</script>
+
+</body>
+</html>
