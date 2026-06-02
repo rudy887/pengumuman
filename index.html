@@ -3,114 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pengumuman Kelulusan</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background:#f3f5f9;
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:15px;
+    background:#f4f6fb;
+    font-family:Segoe UI,sans-serif;
 }
 
 .card{
     width:100%;
-    max-width:500px;
+    max-width:480px;
     background:#fff;
     border-radius:18px;
-    padding:28px;
+    padding:25px;
     text-align:center;
-    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
     border-top:5px solid #2451d1;
 }
 
 .icon-box{
-    width:90px;
-    height:90px;
+    width:80px;
+    height:80px;
     margin:auto;
     border-radius:50%;
-    background:#eef3fb;
+    background:#edf3ff;
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .icon-box i{
-    font-size:40px;
+    font-size:34px;
     color:#2451d1;
 }
 
 h1{
-    color:#081b44;
     font-size:24px;
-    margin-bottom:6px;
-    font-weight:700;
+    color:#081b44;
+    margin-bottom:5px;
 }
 
 h2{
+    font-size:15px;
     color:#2451d1;
-    font-size:16px;
-    margin-bottom:25px;
+    margin-bottom:20px;
 }
 
 .desc{
     color:#667085;
-    font-size:15px;
-    line-height:1.6;
+    line-height:1.5;
     margin-bottom:25px;
+    font-size:14px;
 }
 
 .countdown{
     display:flex;
     justify-content:center;
-    align-items:flex-start;
-    gap:8px;
+    gap:6px;
     margin-bottom:20px;
 }
 
 .time-box{
-    min-width:70px;
+    min-width:60px;
 }
 
 .number{
     background:#f8fafc;
-    border:1px solid #dbe0ea;
+    border:1px solid #dce3ee;
     border-radius:10px;
     padding:8px;
-    font-size:34px;
+    font-size:30px;
     font-weight:700;
-    color:#10254f;
+    color:#0f224f;
 }
 
 .label{
-    margin-top:8px;
-    font-size:12px;
+    margin-top:6px;
+    font-size:11px;
     font-weight:600;
-    color:#4b5563;
+    color:#667085;
 }
 
 .separator{
-    font-size:28px;
-    font-weight:bold;
+    font-size:24px;
+    margin-top:8px;
     color:#9ca3af;
-    margin-top:10px;
+    font-weight:bold;
 }
 
 .note{
+    font-size:12px;
     color:#98a2b3;
-    font-size:13px;
 }
 
 .error-box{
@@ -118,13 +119,14 @@ h2{
     background:#fff5f5;
     border:2px solid #ef4444;
     border-radius:12px;
-    padding:22px;
+    padding:20px;
+    animation:pulse 1.5s infinite;
 }
 
 .error-icon{
     font-size:42px;
     color:#dc2626;
-    margin-bottom:15px;
+    margin-bottom:12px;
 }
 
 .error-title{
@@ -135,22 +137,15 @@ h2{
 }
 
 .error-message{
+    min-height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     font-size:18px;
-    color:#7f1d1d;
-    min-height:30px;
     font-weight:600;
-}
-
-.loading-dots::after{
-    content:"";
-    animation:dots 1.5s infinite;
-}
-
-@keyframes dots{
-    0%{content:"";}
-    33%{content:".";}
-    66%{content:"..";}
-    100%{content:"...";}
+    color:#7f1d1d;
+    transition:opacity .3s ease;
 }
 
 @keyframes pulse{
@@ -159,48 +154,26 @@ h2{
     100%{transform:scale(1);}
 }
 
-.error-box{
-    animation:pulse 1.5s infinite;
-}
-
-@media(max-width:600px){
+@media(max-width:480px){
 
     .card{
-        max-width:380px;
-        padding:20px;
+        padding:18px;
     }
 
-    .icon-box{
-        width:75px;
-        height:75px;
+    .time-box{
+        min-width:50px;
     }
 
-    .icon-box i{
-        font-size:32px;
+    .number{
+        font-size:22px;
+    }
+
+    .separator{
+        font-size:18px;
     }
 
     h1{
         font-size:20px;
-    }
-
-    h2{
-        font-size:14px;
-    }
-
-    .desc{
-        font-size:14px;
-    }
-
-    .time-box{
-        min-width:58px;
-    }
-
-    .number{
-        font-size:24px;
-    }
-
-    .separator{
-        font-size:22px;
     }
 
     .error-title{
@@ -211,6 +184,7 @@ h2{
         font-size:15px;
     }
 }
+
 </style>
 </head>
 <body>
@@ -222,6 +196,7 @@ h2{
     </div>
 
     <h1>PENGUMUMAN KELULUSAN</h1>
+
     <h2>SMP NEGERI 13 KENDARI</h2>
 
     <div class="desc">
@@ -261,7 +236,7 @@ h2{
         </div>
 
         <div class="note">
-            *Sistem akan terbuka otomatis, harap tidak menutup halaman ini.
+            *Sistem akan terbuka otomatis.
         </div>
 
     </div>
@@ -276,7 +251,7 @@ h2{
             Gangguan Server
         </div>
 
-        <div class="error-message" id="errorMessage">
+        <div id="errorMessage" class="error-message">
             Menghubungkan ke server...
         </div>
 
@@ -286,68 +261,102 @@ h2{
 
 <script>
 
-// =========================================================================
-// ATUR TANGGAL DAN WAKTU RILIS DI SINI
-// =========================================================================
-const DEFAULT_DATE = "2026-06-02T20:00:00+08:00";
+// ============================================================
+// PENGATURAN WAKTU
+// ============================================================
 
+const DEFAULT_DATE = "2026-06-02T19:29:00+08:00";
 const targetDate = new Date(DEFAULT_DATE);
-
-const countdownContainer = document.getElementById("countdownContainer");
-const errorBox = document.getElementById("errorBox");
-const errorMessage = document.getElementById("errorMessage");
 
 const messages = [
     "Menghubungkan ke server...",
     "Mengambil data kelulusan...",
-    "Memeriksa status layanan...",
+    "Memverifikasi data siswa...",
+    "Memuat informasi kelulusan...",
     "Server tidak merespons...",
-    "Memuat data siswa...",
     "Jaringan tidak stabil...",
-    "Memproses permintaan...",
+    "Menghubungkan ulang ke server...",
     "Maaf, Jaringan sedang sibuk...",
     "Silakan coba beberapa saat lagi...",
-    "Menghubungkan ulang ke server..."
+    "Memproses permintaan..."
 ];
+
+const countdownContainer =
+document.getElementById("countdownContainer");
+
+const errorBox =
+document.getElementById("errorBox");
+
+const errorMessage =
+document.getElementById("errorMessage");
+
+let errorRunning = false;
+
+function showServerError(){
+
+    if(errorRunning) return;
+
+    errorRunning = true;
+
+    countdownContainer.style.display = "none";
+    errorBox.style.display = "block";
+
+    let index = 0;
+
+    errorMessage.textContent = messages[index];
+
+    setInterval(() => {
+
+        index = (index + 1) % messages.length;
+
+        errorMessage.style.opacity = "0";
+
+        setTimeout(() => {
+
+            errorMessage.textContent =
+            messages[index];
+
+            errorMessage.style.opacity = "1";
+
+        },300);
+
+    },2000);
+}
 
 function updateCountdown(){
 
-    const now = new Date().getTime();
-    const distance = targetDate.getTime() - now;
+    const distance =
+        targetDate.getTime() - Date.now();
 
     if(distance <= 0){
 
         clearInterval(timer);
 
-        countdownContainer.style.display = "none";
-        errorBox.style.display = "block";
-
-        let index = 0;
-
-        errorMessage.textContent = messages[index];
-
-        setInterval(() => {
-            index++;
-            if(index >= messages.length){
-                index = 0;
-            }
-
-            errorMessage.style.opacity = "0";
-
-            setTimeout(() => {
-                errorMessage.textContent = messages[index];
-                errorMessage.style.opacity = "1";
-            },200);
-
-        },2000);
+        showServerError();
 
         return;
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const days =
+        Math.floor(distance / (1000*60*60*24));
+
+    const hours =
+        Math.floor(
+            (distance % (1000*60*60*24))
+            /(1000*60*60)
+        );
+
+    const minutes =
+        Math.floor(
+            (distance % (1000*60*60))
+            /(1000*60)
+        );
+
+    const seconds =
+        Math.floor(
+            (distance % (1000*60))
+            /1000
+        );
 
     document.getElementById("days").textContent =
         String(days).padStart(2,"0");
@@ -362,10 +371,21 @@ function updateCountdown(){
         String(seconds).padStart(2,"0");
 }
 
-updateCountdown();
+// ============================================================
+// CEK SAAT HALAMAN DIBUKA
+// ============================================================
 
-const timer = setInterval(updateCountdown,1000);
+if(Date.now() >= targetDate.getTime()){
 
+    showServerError();
+
+}else{
+
+    updateCountdown();
+
+    var timer =
+        setInterval(updateCountdown,1000);
+}
 </script>
 
 </body>
