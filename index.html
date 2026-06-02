@@ -24,23 +24,24 @@ body{
     align-items:center;
     padding:15px;
     background:#f4f6fb;
-    font-family:Segoe UI,sans-serif;
+    font-family:'Segoe UI',sans-serif;
+    transition:background-color .2s;
 }
 
 .card{
     width:100%;
-    max-width:480px;
+    max-width:500px;
     background:#fff;
-    border-radius:18px;
-    padding:25px;
+    border-radius:20px;
+    padding:28px;
     text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
     border-top:5px solid #2451d1;
 }
 
 .icon-box{
-    width:80px;
-    height:80px;
+    width:85px;
+    height:85px;
     margin:auto;
     border-radius:50%;
     background:#edf3ff;
@@ -51,7 +52,7 @@ body{
 }
 
 .icon-box i{
-    font-size:34px;
+    font-size:38px;
     color:#2451d1;
 }
 
@@ -69,9 +70,9 @@ h2{
 
 .desc{
     color:#667085;
-    line-height:1.5;
+    line-height:1.6;
     margin-bottom:25px;
-    font-size:14px;
+    font-size:15px;
 }
 
 .countdown{
@@ -82,7 +83,7 @@ h2{
 }
 
 .time-box{
-    min-width:60px;
+    min-width:65px;
 }
 
 .number{
@@ -90,7 +91,7 @@ h2{
     border:1px solid #dce3ee;
     border-radius:10px;
     padding:8px;
-    font-size:30px;
+    font-size:32px;
     font-weight:700;
     color:#0f224f;
 }
@@ -118,8 +119,8 @@ h2{
     display:none;
     background:#fff5f5;
     border:2px solid #ef4444;
-    border-radius:12px;
-    padding:20px;
+    border-radius:14px;
+    padding:22px;
     animation:pulse 1.5s infinite;
 }
 
@@ -137,7 +138,7 @@ h2{
 }
 
 .error-message{
-    min-height:50px;
+    min-height:60px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -149,15 +150,21 @@ h2{
 }
 
 @keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.02);}
-    100%{transform:scale(1);}
+    0%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.02);
+    }
+    100%{
+        transform:scale(1);
+    }
 }
 
 @media(max-width:480px){
 
     .card{
-        padding:18px;
+        padding:20px;
     }
 
     .time-box{
@@ -183,6 +190,7 @@ h2{
     .error-message{
         font-size:15px;
     }
+
 }
 
 </style>
@@ -236,7 +244,7 @@ h2{
         </div>
 
         <div class="note">
-            *Sistem akan terbuka otomatis.
+            * Sistem akan terbuka otomatis.
         </div>
 
     </div>
@@ -262,11 +270,67 @@ h2{
 <script>
 
 // ============================================================
-// PENGATURAN WAKTU
+// TANGGAL PENGUMUMAN
 // ============================================================
 
 const DEFAULT_DATE = "2026-06-02T20:00:00+08:00";
 const targetDate = new Date(DEFAULT_DATE);
+
+// ============================================================
+// BEEP SOUND
+// ============================================================
+
+let audioContext = null;
+let lastBeepSecond = -1;
+
+function beep(){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (window.AudioContext ||
+                     window.webkitAudioContext)();
+        }
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gainNode =
+            audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = 1200;
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        gainNode.gain.value = 0.08;
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.15
+        );
+
+    }catch(e){}
+
+}
+
+// Aktifkan audio setelah interaksi pertama
+document.addEventListener("click",()=>{
+
+    if(!audioContext){
+
+        audioContext =
+            new (window.AudioContext ||
+                 window.webkitAudioContext)();
+    }
+
+},{once:true});
+
+// ============================================================
 
 const messages = [
     "Menghubungkan ke server...",
@@ -305,13 +369,13 @@ function showServerError(){
 
     errorMessage.textContent = messages[index];
 
-    setInterval(() => {
+    setInterval(()=>{
 
         index = (index + 1) % messages.length;
 
         errorMessage.style.opacity = "0";
 
-        setTimeout(() => {
+        setTimeout(()=>{
 
             errorMessage.textContent =
             messages[index];
@@ -321,6 +385,7 @@ function showServerError(){
         },300);
 
     },2000);
+
 }
 
 function updateCountdown(){
@@ -332,31 +397,54 @@ function updateCountdown(){
 
         clearInterval(timer);
 
+        document.body.style.background =
+            "#f4f6fb";
+
         showServerError();
 
         return;
     }
 
+    const totalSeconds =
+        Math.floor(distance / 1000);
+
+    if(
+        totalSeconds <= 10 &&
+        totalSeconds > 0 &&
+        totalSeconds !== lastBeepSecond
+    ){
+
+        lastBeepSecond = totalSeconds;
+
+        beep();
+
+        document.body.style.background =
+            totalSeconds % 2
+            ? "#fff0f0"
+            : "#f4f6fb";
+    }
+
     const days =
-        Math.floor(distance / (1000*60*60*24));
+        Math.floor(distance /
+        (1000*60*60*24));
 
     const hours =
         Math.floor(
-            (distance % (1000*60*60*24))
-            /(1000*60*60)
-        );
+        (distance %
+        (1000*60*60*24))
+        /(1000*60*60));
 
     const minutes =
         Math.floor(
-            (distance % (1000*60*60))
-            /(1000*60)
-        );
+        (distance %
+        (1000*60*60))
+        /(1000*60));
 
     const seconds =
         Math.floor(
-            (distance % (1000*60))
-            /1000
-        );
+        (distance %
+        (1000*60))
+        /1000);
 
     document.getElementById("days").textContent =
         String(days).padStart(2,"0");
@@ -369,12 +457,10 @@ function updateCountdown(){
 
     document.getElementById("seconds").textContent =
         String(seconds).padStart(2,"0");
+
 }
 
-// ============================================================
-// CEK SAAT HALAMAN DIBUKA
-// ============================================================
-
+// Jika waktu sudah lewat, langsung tampil error
 if(Date.now() >= targetDate.getTime()){
 
     showServerError();
@@ -385,7 +471,9 @@ if(Date.now() >= targetDate.getTime()){
 
     var timer =
         setInterval(updateCountdown,1000);
+
 }
+
 </script>
 
 </body>
